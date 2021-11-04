@@ -38,7 +38,7 @@ async function handleGetWeather(req,res) {
         let forcasts;
         forcasts = weather.map(el => new Forcast(el.valid_date,el.weather.description,el.min_temp,el.max_temp));
         console.log(forcasts);
-        res.staus(200).send(forcasts);
+        res.status(200).send(forcasts);
         console.log('complete');
     } catch {
         res.status(500).send("something went wrong");

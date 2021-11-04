@@ -14,6 +14,7 @@ const express = require('express');
 const cors = require('cors');
 const weather = require('./data/weather.json');
 const axios = require('axios');
+const { json } = require('stream/consumers');
 const app = express();
 
 app.use(cors());
@@ -37,7 +38,7 @@ async function handleGetWeather(req,res) {
         //console.log(weather);
         let forcasts;
         forcasts = weather.map(el => new Forcast(el.valid_date,el.weather.description,el.min_temp,el.max_temp));
-        console.log(forcasts);
+        forcasts = JSON.stringify(forcasts);
         res.staus(200).send(forcasts);
     } catch {
         res.status(500).send("something went wrong");

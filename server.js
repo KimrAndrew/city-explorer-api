@@ -27,13 +27,15 @@ function handleGetWeather(req,res) {
     
     let lat = req.query.lat;
     let lon = req.query.lon;
-    let city_name = req.query.searchQuery;
+    let city_name = req.query.searchQuery || '';
     let cityData = weather.find(loc => {
-        return (
-            city_name.toLowerCase() === loc.city_name.toLowerCase()
-            && lat === loc.lat
-            && lon === loc.lon
-        );
+        if(city_name.toLowerCase() === loc.city_name.toLowerCase()) {
+            return true;
+        } else if (lat === loc.lat && lon === loc.lon) {
+                return true;
+        } else {
+            return false;
+        }
     });
     cityData=cityData.data;
     let forcasts;

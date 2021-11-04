@@ -31,7 +31,7 @@ async function handleGetWeather(req,res) {
     let lon = req.query.lon;
     let city_name = req.query.searchQuery || '';
     try {
-        console.log(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}&city=${city_name}`);
+        console.log(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`);
         let weather = await axios.get(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`);
         weather = weather.data.data
         let forcasts;

@@ -34,7 +34,7 @@ async function handleGetWeather(req,res) {
         //console.log(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`);
         let weather = await axios.get(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`);
         //weather = weather.data.data
-        console.log(weather);
+        //console.log(weather);
         let forcasts;
         forcasts = weather.map(el => new Forcast(el.valid_date,el.weather.description,el.min_temp,el.max_temp));
         console.log(forcasts);

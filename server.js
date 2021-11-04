@@ -14,7 +14,6 @@ const express = require('express');
 const cors = require('cors');
 const weather = require('./data/weather.json');
 const axios = require('axios');
-const { json } = require('stream/consumers');
 const app = express();
 
 app.use(cors());

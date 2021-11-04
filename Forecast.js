@@ -1,13 +1,19 @@
 const axios = require('axios');
 require('dotenv').config();
 
-
+//requires params: lat and lon 
+//returns array of Forecast objects
 
 async function handleGetWeather(req,res) {
-    console.log('Weather route was hit');    
+    console.log('Weather route was hit');
+    
+    //query parameters: gets weather data through latitude and longitude coordinates
     let lat = req.query.lat;
     let lon = req.query.lon;
+
+
     try {
+        //get request for weather information
         let weather = await axios.get(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`);
         weather = weather.data.data
         let forecasts;

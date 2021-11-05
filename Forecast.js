@@ -17,7 +17,7 @@ async function handleGetWeather(req,res) {
         let weather = await axios.get(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`);
         weather = weather.data.data
         let forecasts;
-        forecasts = weather.map(el => new Forecast(el.valid_date,el.weather.description,el.min_temp,el.max_temp));
+        forecasts = weather.map(obj => new Forecast(obj));
         res.status(200).send(forecasts);
     } catch(error) {
         console.log(error);
@@ -26,11 +26,12 @@ async function handleGetWeather(req,res) {
 }
 
 class Forecast {
-    constructor(date,description,min_temp,max_temp) {
-        this.date = date;
-        this.description = description;
-        this.min_temp = min_temp;
-        this.max_temp = max_temp;
+    constructor(obj) {
+        this.date = obj.valid_date;
+        this.description = obj.weather.description;
+        this.min_temp = obj.min_temp;
+        this.max_temp = obj.max_temp;
+        this.icon = obj.weather.icon
     }
 }
 

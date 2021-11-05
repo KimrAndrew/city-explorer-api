@@ -1,48 +1,59 @@
 'use strict';
 
 require('dotenv').config();
-class Forcast {
-    constructor(date,description,min_temp,max_temp) {
-        this.date = date;
-        this.description = description;
-        this.min_temp = min_temp;
-        this.max_temp = max_temp;
-    }
-}
 
 const express = require('express');
 const cors = require('cors');
-const weather = require('./data/weather.json');
 const axios = require('axios');
 const app = express();
+
+let handleGetWeather = require('./Forecast.js');
 
 app.use(cors());
 
 const PORT = process.env.PORT || 3001
 
-app.get('/weather',handleGetWeather);
-app.get('/*', (req,res) => res.status(403).send('not found'));
 
-async function handleGetWeather(req,res) {
-    console.log('Hello from weather!');
-    //res.status(200).send(weather[0].city_name + " " + weather[1].city_name + " " + weather[2].city_name);
-    
-    let lat = req.query.lat;
-    let lon = req.query.lon;
-    let city_name = req.query.searchQuery || '';
+
+async function handleGetMovies(req,res) {
     try {
-        //console.log(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`);
-        let weather = await axios.get(`http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}`);
-        weather = weather.data.data
-        //console.log(weather);
-        let forcasts;
-        forcasts = weather.map(el => new Forcast(el.valid_date,el.weather.description,el.min_temp,el.max_temp));
-        console.log(forcasts);
-        res.status(200).send(forcasts);
-        console.log('complete');
-    } catch {
-        res.status(500).send("something went wrong");
+        let city_name = req.query.city_name;
+        console.log(city_name);
+        let movies = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${city_name}`);
+        
+        //lets get the 10 most popular movies
+        let movieData = movies.data.results.sort((a,b) => {
+            if(a.popularity > b.popularity) {
+                return -1;
+            } else if (a.popularity < b.popularity) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        movieData = movies.data.results.slice(0,9);
+        movieData=movieData.map(movie => new Movie(movie));
+        console.log(movieData);
+        res.status(200).send(movieData);
+    } catch(error) {
+        console.log(error);
+        res.status(500).send(error);
     }
 }
+
+class Movie {
+    constructor(obj) {
+        this.title = obj.title;
+        this.release_date = obj.release_date;
+        this.poster_path = obj.poster_path;
+        this.popularity = obj.popularity;
+    }
+}
+
+app.get('/weather',handleGetWeather);
+app.get('/movies',handleGetMovies);
+app.get('/*', (req,res) => res.status(404).send('Path does not exist'));
+
 
 app.listen(PORT, () => console.log(`I am a server that is listening on port:${PORT}`));

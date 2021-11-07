@@ -23,3 +23,8 @@
 3. Start time: 9:00-11:00 7:30-8:00
 4.
 5. Actual time needed to complete: 2.5 hrs
+
+1. Performance
+2. Estimated time to complete 5-6 hrs
+3. Working Hours: 3:00-6:00, 7:00-8:30
+4. Actual time needed to complete: 4.5 hrs
